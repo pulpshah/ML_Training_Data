@@ -77,3 +77,11 @@ print(f"Pathos Score: {scores[1]:.2f}")
 print(f"Ethos Score: {scores[2]:.2f}")
 
 ```
+
+** Output: **
+
+```
+Logos Score: 0.56
+Pathos Score: 0.93
+Ethos Score: 0.34
+``` 
