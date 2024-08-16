@@ -78,7 +78,7 @@ print(f"Ethos Score: {scores[2]:.2f}")
 
 ```
 
-** Output: **
+**Output:**
 
 ```
 Logos Score: 0.56
