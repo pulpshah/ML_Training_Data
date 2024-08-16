@@ -28,6 +28,39 @@ Deployment: Deploy the model to a suitable environment for practical use.
 
 Number of sentences: 5000
 
+## Model Use:
+
+`from transformers import BertTokenizer # Load BertForArgumentScoring instead of BertForSequenceClassification
+
+tokenizer = RobertaTokenizer.from_pretrained('/content/argument_scoring_model')
+model = RobertaForArgumentScoring.from_pretrained('/content/argument_scoring_model') # Load BertForArgumentScoring instead of BertForSequenceClassification
+# Set the model to evaluation mode
+model.eval()
+
+def prepare_input(text):
+    return tokenizer(text, padding='max_length', truncation=True, max_length=512, return_tensors='pt')
+
+# Example input text
+text = "magine a mother who has to choose between paying for her child’s life-saving medication or keeping the lights on at home. Every day, countless families face this agonizing decision because the cost of healthcare in the U.S. is so high. This isn’t just a statistic—it’s a heartbreaking reality that affects real people. The emotional toll of watching loved ones suffer due to unaffordable care is immense and unacceptable. We need to act now to ensure that every individual, regardless of their financial situation, has access to the healthcare they need. It’s time to put compassion into action and make healthcare affordable for everyone."
+
+# Prepare the input
+inputs = prepare_input(text)
+
+# Run the input through the model
+# Move the input tensors to the same device as the model
+with torch.no_grad():
+    outputs = model(
+        input_ids=inputs['input_ids'].to(model.device), # Move input_ids to the model's device
+        attention_mask=inputs['attention_mask'].to(model.device) # Move attention_mask to the model's device
+    )
+
+# Extract scores from the output
+scores = outputs['logits'].squeeze().tolist()
+
+# Print the results
+print(f"Logos Score: {scores[0]:.2f}")
+print(f"Pathos Score: {scores[1]:.2f}")
+print(f"Ethos Score: {scores[2]:.2f}")`
 
 
 # Sentence Structure Classification
