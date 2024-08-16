@@ -36,12 +36,19 @@ Compound-Complex: Sentences that contain at least two independent clauses and on
 Model Choice: We will use a transformer-based model for this task as well. Transformers are capable of understanding the syntactic structure of sentences, making them suitable for distinguishing between simple, compound, and compound-complex sentences.
 
 Steps:
+
 Data Collection: Gather transcripts from various presidential debates and Generate sentences using GPT-4.
+
 Data Labeling: label each sentence as simple, compound, or compound-complex.
+
 Model Selection: Choose a transformer model, such as BERT or RoBERTa, for the classification task.
+
 Training: Train the model on the labeled dataset.
+
 Evaluation: Evaluate the model’s performance using appropriate metrics (accuracy, precision, recall, F1 score).
+
 Deployment: Deploy the model to a suitable environment for practical use.
+
 Number of sentences: 5000
 
 
