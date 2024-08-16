@@ -30,7 +30,8 @@ Number of sentences: 5000
 
 ## Model Use:
 
-`from transformers import BertTokenizer # Load BertForArgumentScoring instead of BertForSequenceClassification
+``` Python
+from transformers import BertTokenizer # Load BertForArgumentScoring instead of BertForSequenceClassification
 
 tokenizer = RobertaTokenizer.from_pretrained('/content/argument_scoring_model')
 model = RobertaForArgumentScoring.from_pretrained('/content/argument_scoring_model') # Load BertForArgumentScoring instead of BertForSequenceClassification
@@ -60,9 +61,9 @@ scores = outputs['logits'].squeeze().tolist()
 # Print the results
 print(f"Logos Score: {scores[0]:.2f}")
 print(f"Pathos Score: {scores[1]:.2f}")
-print(f"Ethos Score: {scores[2]:.2f}")`
+print(f"Ethos Score: {scores[2]:.2f}")
 
-
+```
 # Sentence Structure Classification
 Objective: The goal is to develop a model that can classify a given sentence as simple, compound, or compound-complex.
 
