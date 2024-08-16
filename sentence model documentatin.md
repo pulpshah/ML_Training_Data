@@ -15,10 +15,15 @@ Model Choice: We will use a transformer-based model, as these models have shown 
 
 Steps:
 Data Collection: Gather transcripts from various presidential debates and Generate sentences using GPT-4.
+
 Data Labeling: label each sentence as exclamatory, imperative, declarative, or interrogative.
+
 Model Selection: Choose a transformer model, such as BERT or RoBERTa, for the classification task.
+
 Training: Train the model on the labeled dataset.
+
 Evaluation: Evaluate the model’s performance using appropriate metrics (accuracy, precision, recall, F1 score).
+
 Deployment: Deploy the model to a suitable environment for practical use.
 
 Number of sentences: 5000
