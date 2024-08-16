@@ -33,35 +33,36 @@ Number of sentences: 5000
 ``` Python
 from transformers import BertTokenizer # Load BertForArgumentScoring instead of BertForSequenceClassification
 
-tokenizer = RobertaTokenizer.from_pretrained('/content/argument_scoring_model')
-model = RobertaForArgumentScoring.from_pretrained('/content/argument_scoring_model') # Load BertForArgumentScoring instead of BertForSequenceClassification
+tokenizer = RobertaTokenizer.from_pretrained('model directory')
+model = RobertaForArgumentScoring.from_pretrained('model directory') # Load BertForArgumentScoring instead of BertForSequenceClassification
 # Set the model to evaluation mode
 model.eval()
 
-def prepare_input(text):
-    return tokenizer(text, padding='max_length', truncation=True, max_length=512, return_tensors='pt')
+# Function to predict the label for a given input
+def predict(input_text):
+    # Step 2: Tokenize the input text
+    inputs = tokenizer(input_text, return_tensors='pt', truncation=True, padding=True, max_length=512)
 
-# Example input text
-text = "magine a mother who has to choose between paying for her child’s life-saving medication or keeping the lights on at home. Every day, countless families face this agonizing decision because the cost of healthcare in the U.S. is so high. This isn’t just a statistic—it’s a heartbreaking reality that affects real people. The emotional toll of watching loved ones suffer due to unaffordable care is immense and unacceptable. We need to act now to ensure that every individual, regardless of their financial situation, has access to the healthcare they need. It’s time to put compassion into action and make healthcare affordable for everyone."
+    # Move inputs to the same device as the model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
 
-# Prepare the input
-inputs = prepare_input(text)
+    # Step 3: Make prediction
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits = outputs.logits
+        preds = torch.argmax(logits, dim=1).item()  # Get the predicted label
 
-# Run the input through the model
-# Move the input tensors to the same device as the model
-with torch.no_grad():
-    outputs = model(
-        input_ids=inputs['input_ids'].to(model.device), # Move input_ids to the model's device
-        attention_mask=inputs['attention_mask'].to(model.device) # Move attention_mask to the model's device
-    )
+    # Step 4: Map the prediction to the actual label
+    reverse_label_mapping = {v: k for k, v in label_mapping.items()}
+    predicted_label = reverse_label_mapping[preds]
 
-# Extract scores from the output
-scores = outputs['logits'].squeeze().tolist()
+    return predicted_label
 
-# Print the results
-print(f"Logos Score: {scores[0]:.2f}")
-print(f"Pathos Score: {scores[1]:.2f}")
-print(f"Ethos Score: {scores[2]:.2f}")
+# Test with your own input
+input_text = "What time does the meeting start?"
+predicted_label = predict(input_text)
+print(f"Predicted Label: {predicted_label}")
 
 ```
 # Sentence Structure Classification
@@ -90,4 +91,39 @@ Deployment: Deploy the model to a suitable environment for practical use.
 
 Number of sentences: 5000
 
+``` Python
+from transformers import BertTokenizer # Load BertForArgumentScoring instead of BertForSequenceClassification
+
+tokenizer = RobertaTokenizer.from_pretrained('model directory')
+model = RobertaForArgumentScoring.from_pretrained('model directory') # Load BertForArgumentScoring instead of BertForSequenceClassification
+# Set the model to evaluation mode
+model.eval()
+
+# Function to predict the label for a given input
+def predict(input_text):
+    # Step 2: Tokenize the input text
+    inputs = tokenizer(input_text, return_tensors='pt', truncation=True, padding=True, max_length=512)
+
+    # Move inputs to the same device as the model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    # Step 3: Make prediction
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits = outputs.logits
+        preds = torch.argmax(logits, dim=1).item()  # Get the predicted label
+
+    # Step 4: Map the prediction to the actual label
+    reverse_label_mapping = {v: k for k, v in label_mapping.items()}
+    predicted_label = reverse_label_mapping[preds]
+
+    return predicted_label
+
+# Test with your own input
+input_text = "It is during our darkest moments that we must focus to see the light."
+predicted_label = predict(input_text)
+print(f"Predicted Label: {predicted_label}")
+
+```
 
